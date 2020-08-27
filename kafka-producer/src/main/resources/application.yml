@@ -1,0 +1,13 @@
+server:
+  port: 1111
+spring:
+  application:
+    name: kafka-producer
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      topic: testDemo
+      retries: 0
+      batch-size: 4096
+      linger: 1
+      buffer-memory: 40960
