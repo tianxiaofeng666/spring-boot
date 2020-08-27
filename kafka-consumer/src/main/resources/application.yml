@@ -1,0 +1,23 @@
+server:
+  port: 1112
+spring:
+  application:
+    name: kafka-consumer
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      auto-offset-reset: latest
+      topic: testDemo
+      group-id: test
+      concurrency: 10
+  mail:
+    host: smtp.qq.com
+    username: 1248083709@qq.com
+    password: kvlkfszgpkdkhfge
+    properties:
+      mail:
+        smtp:
+          auth: true
+    default-encoding: utf-8
