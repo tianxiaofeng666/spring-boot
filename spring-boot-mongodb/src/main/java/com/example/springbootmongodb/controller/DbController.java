@@ -96,4 +96,39 @@ public class DbController {
         UpdateResult res = mongoTemplate.updateMulti(query, update, User.class);
         return res;
     }
+
+    /**
+     * 分页查询并排序，skip(), limilt(), sort()三个放在一起执行的时候，执行的顺序是先 sort(), 然后是 skip()，最后是显示的 limit()
+     */
+    @RequestMapping("/testPage")
+    public List<User> testPage(@RequestBody JSONObject json){
+        Query query = new Query();
+        String name = json.getString("name");
+        int currentPage = json.getInteger("currentPage");
+        int pageSize = json.getInteger("pageSize");
+        if(StringUtils.isNotBlank(name)){
+            Criteria criteria = Criteria.where("name").is(name);
+            query.addCriteria(criteria);
+        }
+        query.skip((currentPage - 1) * pageSize);
+        query.limit(pageSize);
+        query.with(Sort.by(Sort.Order.asc("id")));
+        List<User> list = mongoTemplate.find(query, User.class);
+        return list;
+    }
+
+    /**
+     * and、or 组合条件查询
+     */
+    @RequestMapping("testAndOr")
+    public List<User> testAndOr(){
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        Criteria criteria1 = Criteria.where("name").is("张三").and("mobile").is("17521046666");
+        Criteria criteria2 = Criteria.where("name").is("小米");
+        criteria.orOperator(criteria1,criteria2);
+        query.addCriteria(criteria);
+        List<User> list = mongoTemplate.find(query,User.class);
+        return list;
+    }
 }
