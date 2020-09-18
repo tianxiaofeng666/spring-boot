@@ -1,0 +1,29 @@
+server:
+  port: 10088
+spring:
+  application:
+    name: rabbitmq-consumer
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: xiaofeng
+    password: 123456
+    virtual-host: /xiaofeng
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 100
+  mail:
+    host: smtp.qq.com
+    username: 1248083709@qq.com
+    password: kvlkfszgpkdkhfge
+    properties:
+      mail:
+        smtp:
+          auth: true
+    default-encoding: utf-8
+  data:
+    mongodb:
+      uri: mongodb://tianxiaofeng:Iyunbao666@localhost:27017/user
