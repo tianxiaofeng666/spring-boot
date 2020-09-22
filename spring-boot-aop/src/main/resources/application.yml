@@ -1,5 +1,0 @@
-server:
-  port: 2211
-spring:
-  application:
-    name: spring-boot-aop
