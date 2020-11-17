@@ -52,91 +52,31 @@ public class TestController {
         //自定义线程池
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10,10,60L, TimeUnit.SECONDS,new LinkedBlockingDeque<>(200));
         String url = "http://localhost:8081/test";
-        Future<String> res1 = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res1.get());
-        Future<String> res2 = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res2.get());
-        Future<String> res3 = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res3.get());
-        Future<String> res4 = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res4.get());
-        Future<String> res5 = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res5.get());
+        for(int i=0; i<10; i++){
+            Future<String> res = executor.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    String result = restTemplate.postForObject(url,null,String.class);
+                    return result;
+                }
+            });
+            System.out.println(res.get());
+        }
     }
 
     @RequestMapping("/testAll2")
     public void testAll2() throws ExecutionException, InterruptedException {
         String url = "http://localhost:8081/test";
-        Future<String> res1 = testThreadPool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res1.get());
-        Future<String> res2 = testThreadPool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res2.get());
-        Future<String> res3 = testThreadPool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res3.get());
-        Future<String> res4 = testThreadPool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res4.get());
-        Future<String> res5 = testThreadPool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = restTemplate.postForObject(url,null,String.class);
-                return result;
-            }
-        });
-        System.out.println(res5.get());
+        for(int i=0; i<10; i++){
+            Future<String> res = testThreadPool.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    String result = restTemplate.postForObject(url,null,String.class);
+                    return result;
+                }
+            });
+            System.out.println(res.get());
+        }
     }
 
 }
