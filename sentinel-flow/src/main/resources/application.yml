@@ -1,0 +1,44 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: sentinel-flow
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: sentinel-flow
+      discovery:
+        server-addr: ${spring.cloud.nacos.config.server-addr}
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+        port: 8719
+      eager: true
+      datasource:
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            dataId: ${spring.application.name}-flow-rules
+            groupId: ${spring.cloud.nacos.config.group}
+            data-type: json
+            rule-type: flow
+        authority:
+          nacos:
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            dataId: ${spring.application.name}-authority-rules
+            groupId: ${spring.cloud.nacos.config.group}
+            data-type: json
+            rule-type: authority
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            dataId: ${spring.application.name}-degrade-rules
+            groupId: ${spring.cloud.nacos.config.group}
+            data-type: json
+            rule-type: degrade
+feign:
+  hystrix:
+    enabled: true
