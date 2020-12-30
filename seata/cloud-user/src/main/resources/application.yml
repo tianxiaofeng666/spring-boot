@@ -1,0 +1,21 @@
+server:
+  port: 4444
+spring:
+  application:
+    name: cloud-user
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud_user?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+      discovery:
+        server-addr: ${spring.cloud.nacos.config.server-addr}
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+seata:
+  tx-service-group: my_test_tx_group
