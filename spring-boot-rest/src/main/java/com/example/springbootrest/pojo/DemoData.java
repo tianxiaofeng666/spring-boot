@@ -45,5 +45,16 @@ public class DemoData {
     @ExcelProperty("性别")
     private String sex;
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @ExcelProperty("城市")
+    private String city;
+
 
 }
