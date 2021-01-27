@@ -337,6 +337,37 @@ public class UserController {
         }
         return "上传成功";
     }
+    
+    /**
+     * 某一列带下拉框的导出
+     */
+    @RequestMapping("/testExportSelect")
+    public String testExportSelect(@RequestBody JSONObject json) {
+        String fileName = "D:\\excel\\" + System.currentTimeMillis() + ".xlsx";
+        // 这里 需要指定写用哪个class去写
+        String modelType = json.getString("modelType");
+        String modelName = path + modelType;
+        Class<?> modelClass = null;
+        try {
+            modelClass = Class.forName(modelName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        //ExcelWriter excelWriter = EasyExcel.write(fileName, modelClass).build();
+        //WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
+        List list = new ArrayList();
+        DemoData data = new DemoData();
+        data.setId(1);
+        data.setName("小明");
+        data.setAge(18);
+        data.setSex("男");
+        data.setCity("河南");
+        list.add(data);
+        EasyExcelFactory.write(fileName,modelClass).registerWriteHandler(new SelectWriteHandler()).sheet("带下拉框").doWrite(list);
+
+        return "导出成功!";
+    }
 
 
 }
