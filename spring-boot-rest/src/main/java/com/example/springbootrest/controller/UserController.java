@@ -339,7 +339,7 @@ public class UserController {
     }
     
     /**
-     * 某一列带下拉框的导出
+     * 某一列带下拉框的导出，需要自定义一个处理器进行处理
      */
     @RequestMapping("/testExportSelect")
     public String testExportSelect(@RequestBody JSONObject json) {

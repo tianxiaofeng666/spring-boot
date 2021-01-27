@@ -24,6 +24,7 @@ public class SelectWriteHandler implements SheetWriteHandler {
         String[] MorF = new String[]{"男", "女"};
         String[] cityList = new String[]{"河南","河北","上海","北京"};
         Map<Integer, String[]> mapDropDown = new HashMap<>();
+        //列从0开始
         mapDropDown.put(3, MorF);
         mapDropDown.put(4,cityList);
         Sheet sheet = writeSheetHolder.getSheet();
