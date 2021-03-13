@@ -29,16 +29,19 @@ public class FlowController extends BaseController{
     private ThreadPoolExecutor testThreadPool;
 
     @RequestMapping(value = "/flow", method = RequestMethod.POST)
-    @SentinelResource(value = "testFlow", blockHandler = "exceptionHandler")
-    public String flow(@RequestBody JSONObject json){
+    @SentinelResource(value = "testFlow", blockHandler = "exceptionHandler", fallback = "bizException")
+    public String flow(@RequestBody JSONObject json) throws Exception{
         String ip = request.getRemoteAddr();
+        String id = json.getString("id");
         log.info("入参:{},请求ip:{}",json.getString("id"),ip);
-        try {
-            Thread.sleep(80);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if("4".equals(id)){
+            int a = Integer.parseInt(id) / 0;
         }
         return "进来啦！！！";
+    }
+    
+    public String bizException(JSONObject json,Throwable e){
+        return "业务异常。。。";
     }
 
     /**
