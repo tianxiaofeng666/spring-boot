@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.springbootrest.listener.MemberListener;
 import com.example.springbootrest.listener.MemberListener11;
+import com.example.springbootrest.listener.SelectWriteHandler;
 import com.example.springbootrest.pojo.DemoData;
 import com.example.springbootrest.pojo.Member;
 import com.example.springbootrest.pojo.Policy;
@@ -23,6 +24,7 @@ import com.example.springbootrest.util.ExcelImportUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -222,8 +224,14 @@ public class UserController {
         return res;
     }
 
+    @Value("${file.docBase}")
+    private String docBase;
+
+    @Value("${file.path}")
+    private String filePath;
+
     /**
-     * 上传图片或视频
+     * 上传图片或视频, 上传到linux服务器 /usr/application/uploadfile/目录下，前端通过 http://ip:port/upload/**.jpg来访问
      */
     @RequestMapping("/uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file){
@@ -236,12 +244,8 @@ public class UserController {
         fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
         System.out.print("（加个时间戳，尽量避免文件名称重复）保存的文件名为: "+fileName+"\n");
 
-        String path = "D:/fileUpload/" +fileName;
-        //文件绝对路径
-        System.out.print("保存文件绝对路径"+path+"\n");
-
         //创建文件路径
-        File dest = new File(path);
+        File dest = new File(docBase,fileName);
 
         //判断文件是否已经存在
         if (dest.exists()) {
@@ -257,7 +261,6 @@ public class UserController {
         try {
             //上传文件
             file.transferTo(dest); //保存文件
-            System.out.print("保存文件路径"+path+"\n");
             //url="http://localhost:8080/images/"+fileName;
             //int jieguo= shiPinService.insertUrl(fileName,path,url);
             //System.out.print("插入结果"+jieguo+"\n");
@@ -267,14 +270,14 @@ public class UserController {
             return "上传失败";
         }
 
-        return "上传成功";
+        return "上传成功,路径：" + filePath + fileName;
     }
 
     /**
-     * 上传图片或视频
+     * 上传图片或视频，上传到本地任一目录或者是项目所在某一目录下
      */
     @RequestMapping("/uploadFile11")
-    public String uploadFile11(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws FileNotFoundException {
+    public String uploadFile11(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
         if(file.isEmpty()){
             return "上传文件不能为空";
         }
@@ -283,61 +286,25 @@ public class UserController {
 
         fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
         System.out.print("（加个时间戳，尽量避免文件名称重复）保存的文件名为: "+fileName+"\n");
-
-        File path = new File(ResourceUtils.getURL("classpath:").getPath());
-        File upload = new File(path.getAbsolutePath(),"fileUpload");
+        //项目目录下
+        File upload = new File(ResourceUtils.getURL("").getPath(),"src/main/resources/fileUpload");
         if(!upload.exists()) {
             upload.mkdirs();
         }
-        //return upload.getAbsolutePath();
-
         //创建文件路径
-        //String savePath ="D:\\fileExport\\spring-boot-rest\\src\\main\\resources\\fileUpload";
         File dest = new File(upload.getAbsolutePath(),fileName);
+        //任一目录下
+        /*String path = "F:\\fileUpload";
+        File dest = new File(path,fileName);*/
         try {
             //上传文件
             file.transferTo(dest); //保存文件
-            System.out.print("保存文件路径"+path+"\n");
         } catch (IOException e) {
             return "上传失败";
         }
-        return "上传成功";
+        return "上传成功，保存文件路径：" + upload+ "/" + fileName;
     }
 
-    /**
-     * 上传图片或视频
-     */
-    @RequestMapping("/uploadFile22")
-    public String uploadFile22(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
-        if(file.isEmpty()){
-            return "上传文件不能为空";
-        }
-        //获取文件名
-        String fileName = file.getOriginalFilename();
-        fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
-
-        File path = new File(ResourceUtils.getURL("classpath:static").getPath());
-        if(!path.exists()) path = new File("");
-        //如果上传目录为/static/img/，则可以如下获取：
-        File upload = new File(path.getAbsolutePath(),"src\\main\\resources\\static\\img");
-        if(!upload.exists()) {
-            upload.mkdirs();
-        }
-        //return upload.getAbsolutePath();
-
-        //创建文件路径
-        //String savePath ="D:\\fileExport\\spring-boot-rest\\src\\main\\resources\\fileUpload";
-        File dest = new File(upload.getAbsolutePath(),fileName);
-        try {
-            //上传文件
-            file.transferTo(dest); //保存文件
-            System.out.print("保存文件路径"+path+"\n");
-        } catch (IOException e) {
-            return "上传失败";
-        }
-        return "上传成功";
-    }
-    
     /**
      * 某一列带下拉框的导出，需要自定义一个处理器进行处理
      */
