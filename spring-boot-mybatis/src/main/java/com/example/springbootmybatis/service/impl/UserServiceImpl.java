@@ -16,7 +16,32 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<User> findByPage(int from,int num) {
+        return userDao.findByPage(from,num);
+    }
+
+    @Override
+    public int findCount() {
+        return userDao.findCount();
+    }
+
+    @Override
+    public List<User> getUserByCondition(User user) {
+        return userDao.getUserByCondition(user);
+    }
+
+    @Override
+    public List<User> getUserByConditionAndPage(String userName, int from, int num) {
+        return userDao.getUserByConditionAndPage(userName,from,num);
+    }
+
+    @Override
+    public int findCountByCondition(User user) {
+        return userDao.findCountByCondition(user);
+    }
+
+    @Override
+    public void insertOneUser(User user) {
+        userDao.insertOneUser(user);
     }
 }

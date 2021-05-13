@@ -3,18 +3,97 @@
 <mapper namespace="com.example.springbootmybatis.mapper.UserDao" >
     <resultMap id="BaseResultMap" type="com.example.springbootmybatis.pojo.User" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="user_id" property="userId" jdbcType="BIGINT" />
-        <result column="role_id" property="roleId" jdbcType="BIGINT" />
-        <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
-        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
-        <result column="creator" property="creator" jdbcType="BIGINT" />
-        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
-        <result column="modifier" property="modifier" jdbcType="BIGINT" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="gender" property="gender" jdbcType="CHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="is_delete" property="isDelete" jdbcType="CHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="findAll" resultMap="BaseResultMap"  >
-        select id,user_id,role_id,is_deleted,gmt_created,creator,gmt_modified,modifier from t_user_menu_role
+    <sql id="Base_Column_List">
+        id,user_name,password,age,gender,city,is_delete,creator,create_time,modifier,update_time
+    </sql>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        select 
+        <include refid="Base_Column_List"></include>
+            from t_user order by create_time limit #{from},#{num}
     </select>
+
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from t_user
+    </select>
+
+    <select id="getUserByCondition" resultMap="BaseResultMap" parameterType="com.example.springbootmybatis.pojo.User" >
+        select
+        <include refid="Base_Column_List" />
+        from t_user
+        <where>
+            <include refid="sql_condition"></include>
+        </where>
+    </select>
+
+    <sql id="sql_condition" >
+        <!--模糊查询-->
+        <if test="userName != null">
+            user_name like CONCAT('%',#{userName},'%')
+        </if>
+        <!--<if test="gender != null">
+            AND gender = #{gender}
+        </if>
+        <if test="city != null">
+            AND city = #{city}
+        </if>
+        <if test="createTime != null">
+            AND DATE_FORMAT(create_time,'%Y-%m-%d') &lt;= #{createTime}
+        </if>-->
+    </sql>
+
+    <select id="getUserByConditionAndPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from t_user
+        <where>
+            <include refid="sql_condition"></include>
+        </where>
+        <!--<if test="userName != null">
+            and user_name like CONCAT('%',#{userName},'%')
+        </if>-->
+        order by create_time limit #{from},#{num}
+    </select>
+
+    <select id="findCountByCondition" resultType="java.lang.Integer" parameterType="com.example.springbootmybatis.pojo.User">
+        select count(*) from t_user
+        <where>
+            <include refid="sql_condition"></include>
+        </where>
+    </select>
+
+    <insert id="insertOneUser" parameterType="com.example.springbootmybatis.pojo.User" >
+        insert into t_user (id,user_name,password,age,gender,city,is_delete,creator,create_time,modifier,update_time)
+            values (#{id}, #{userName}, #{password}, #{age}, #{gender}, #{city}, #{isDelete}, #{creator}, now(), #{modifier}, now())
+    </insert>
+
+    <update id="updateUser" parameterType="com.example.springbootmybatis.pojo.User">
+        update t_user
+        <set>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="1 == 1">
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
 </mapper>
 
