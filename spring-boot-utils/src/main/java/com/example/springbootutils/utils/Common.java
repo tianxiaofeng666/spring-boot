@@ -15,9 +15,7 @@ public class Common {
      */
     public static File multipartFileToFile(MultipartFile file) throws Exception {
         File toFile = null;
-        if (file.equals("") || file.getSize() <= 0) {
-            file = null;
-        } else {
+        if (file != null && file.getSize() > 0) {
             InputStream ins = null;
             ins = file.getInputStream();
             toFile = new File(file.getOriginalFilename());
