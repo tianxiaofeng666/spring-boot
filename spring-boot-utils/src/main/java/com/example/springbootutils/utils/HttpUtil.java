@@ -304,8 +304,10 @@ public class HttpUtil {
             while(var4.hasNext()) {
                 result = (String)var4.next();
                 File file = (File)okHttp.files.get(result);
-                long fileSize = file.length();
-                requestBody.addPart(Headers.of(new String[]{"Content-Disposition", "form-data; name=\"" + result + "\";filename=\"" + file.getName() + "\";filesize=" + fileSize}), RequestBody.create(MediaType.parse("image/*"), file));
+                if(file != null){
+                    long fileSize = file.length();
+                    requestBody.addPart(Headers.of(new String[]{"Content-Disposition", "form-data; name=\"" + result + "\";filename=\"" + file.getName() + "\";filesize=" + fileSize}), RequestBody.create(MediaType.parse("image/*"), file));
+                }
             }
         }
 
