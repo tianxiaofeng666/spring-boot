@@ -243,9 +243,9 @@ public class UserController {
 
         fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
         System.out.print("（加个时间戳，尽量避免文件名称重复）保存的文件名为: "+fileName+"\n");
-
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //创建文件路径
-        File dest = new File(docBase,fileName);
+        File dest = new File(docBase + date + "/",fileName);
 
         //判断文件是否已经存在
         if (dest.exists()) {
@@ -270,7 +270,7 @@ public class UserController {
             return "上传失败";
         }
 
-        return "上传成功,路径：" + filePath + fileName;
+        return "上传成功,路径：" + filePath + date + "/" + fileName;
     }
 
     /**
