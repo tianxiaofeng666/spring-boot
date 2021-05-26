@@ -1,5 +1,6 @@
 package com.example.springbootmybatis.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.springbootmybatis.pojo.User;
 
 import java.util.List;
@@ -17,5 +18,9 @@ public interface UserService {
     public int findCountByCondition(User user);
 
     public void insertOneUser(User user);
+
+    JSONObject testMulti(int userId);
+
+    List<JSONObject> testMultiList(List<Integer> userIdList);
 
 }

@@ -1,5 +1,6 @@
 package com.example.springbootmybatis.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.springbootmybatis.mapper.UserDao;
 import com.example.springbootmybatis.pojo.User;
 import com.example.springbootmybatis.service.UserService;
@@ -43,5 +44,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void insertOneUser(User user) {
         userDao.insertOneUser(user);
+    }
+
+    @Override
+    public JSONObject testMulti(int userId) {
+        return userDao.testMulti(userId);
+    }
+
+    @Override
+    public List<JSONObject> testMultiList(List<Integer> userIdList) {
+        return userDao.testMultiList(userIdList);
     }
 }

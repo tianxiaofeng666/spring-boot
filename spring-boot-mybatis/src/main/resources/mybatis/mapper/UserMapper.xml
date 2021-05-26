@@ -96,5 +96,21 @@
         where id = #{id}
     </update>
 
+    <select id="testMulti" resultType="com.alibaba.fastjson.JSONObject">
+        select t1.id as userId,t1.user_name as userName,t1.age,t1.gender,t2.id as departId,t2.name as departName
+            from t_user t1,t_depart t2
+            where t1.depart_id = t2.id
+            and t1.id = #{userId}
+    </select>
+
+    <select id="testMultiList" resultType="com.alibaba.fastjson.JSONObject">
+        select t1.id as userId,t1.user_name as userName,t1.age,t1.gender,t2.id as departId,t2.name as departName
+            from t_user t1,t_depart t2
+            where t1.depart_id = t2.id
+            and t1.id in 
+            <foreach collection="list" item="userIdList" index="index"
+                     open="(" separator="," close=")" >#{userIdList}</foreach>
+    </select>
+
 </mapper>
 

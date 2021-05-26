@@ -1,6 +1,8 @@
 package com.example.springbootmybatis.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.springbootmybatis.bean.RestfulResponse;
 import com.example.springbootmybatis.pojo.User;
 import com.example.springbootmybatis.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -76,6 +78,19 @@ public class UserController {
         User user = JSONObject.parseObject(json.toJSONString(),User.class);
         userService.insertOneUser(user);
         return "添加成功";
+    }
+
+    @RequestMapping("/testMulti")
+    public RestfulResponse testMulti(@RequestBody JSONObject json){
+        int userId = json.getInteger("userId");
+        return RestfulResponse.success(userService.testMulti(userId));
+    }
+
+    @RequestMapping("/testMultiList")
+    public RestfulResponse testMultiList(@RequestBody JSONObject json){
+        JSONArray idList = json.getJSONArray("idList");
+        List<Integer> userIdList = JSONObject.parseArray(idList.toJSONString(),Integer.class);
+        return RestfulResponse.success(userService.testMultiList(userIdList));
     }
 
 

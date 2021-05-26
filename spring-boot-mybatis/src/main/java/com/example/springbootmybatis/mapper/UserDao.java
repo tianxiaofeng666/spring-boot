@@ -1,5 +1,6 @@
 package com.example.springbootmybatis.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.springbootmybatis.pojo.User;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface UserDao {
     public int findCountByCondition(User user);
 
     public void insertOneUser(User user);
+
+    JSONObject testMulti(int userId);
+
+    List<JSONObject> testMultiList(List<Integer> userIdList);
 }
