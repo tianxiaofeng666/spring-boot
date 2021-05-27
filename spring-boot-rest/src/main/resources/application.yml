@@ -1,3 +1,6 @@
+# 图片上传linux
 file:
+  # 文件在linux上的存储目录
   docBase: /usr/application/uploadfile/
+  # 前端访问的目录
   path: /upload/
