@@ -9,10 +9,12 @@ import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 某一列带下拉框
+ */
 public class SelectWriteHandler implements SheetWriteHandler {
     @Override
     public void beforeSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
