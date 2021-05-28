@@ -24,25 +24,32 @@ import java.time.LocalTime;
                try {
                    field.setAccessible(true);
                    ApiModelProperty apiModelPropertyAnnotation = field.getAnnotation(ApiModelProperty.class);
+                   //如果该属性没有检索条件，直接跳过
                    if (Modifier.isStatic(field.getModifiers())
                            || apiModelPropertyAnnotation == null
                            || field.get(queryModel) == null
                            || StringUtils.isEmpty(field.get(queryModel))) {
                        continue;
                    }
-
+                    //检索条件中日期处理
                    boolean isTimeType = (field.getType() == LocalTime.class || field.getType() == LocalDate.class || field.getType() == LocalDateTime.class) && field.get(queryModel) != null;
                    if (isTimeType) {
                        String notes = apiModelPropertyAnnotation.notes();
                        if ("TimeFrom".equalsIgnoreCase(notes)) {
+                           //大于等于
                            queryWrapper.ge(apiModelPropertyAnnotation.name(), field.get(queryModel));
                            continue;
                        } else if ("TimeTo".equalsIgnoreCase(notes)) {
-                           queryWrapper.lt(apiModelPropertyAnnotation.name(), field.get(queryModel));
+                           //小于等于
+                           queryWrapper.le(apiModelPropertyAnnotation.name(), field.get(queryModel));
                            continue;
                        }
                    }
-                   queryWrapper.eq(apiModelPropertyAnnotation.name(), field.get(queryModel));
+                   if(apiModelPropertyAnnotation.required()){
+                       queryWrapper.like(apiModelPropertyAnnotation.name(), field.get(queryModel));
+                   }else{
+                       queryWrapper.eq(apiModelPropertyAnnotation.name(), field.get(queryModel));
+                   }
                } catch (Exception e) {
 
                }
