@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>代码生成工具</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //按钮单击时执行
+            $("#download").click(function(){
+                var moduleVal = $("#module").val();
+                /*var name2 = document.getElementById("name").value;
+                var name3 = $("#name").val();
+                alert("姓名：" + nameVal + "&&" + name2 + "**" + name3);*/
+                var urlVal = $("#url").val();
+                var usernameVal = $("#username").val();
+                var passwordVal = $("#password").val();
+                var tablenameVal = $("#tablename").val();
+                var url = "http://localhost:8080/codegen/download";
+                var data11 = {
+                    "module":moduleVal,
+                    "url":urlVal,
+                    "username":usernameVal,
+                    "password":passwordVal,
+                    "tablename":tablenameVal
+                };
+                var dataJson = JSON.stringify(data11);
+                $.ajax({
+                    async: false,
+                    url: url,
+                    type: "post",
+                    data: dataJson,
+                    datatype:"json",
+                    headers: {
+                        "content-Type": "application/json"
+                    },
+                    success:function (result) {
+                        window.location.href = "http://localhost:8080/test?module=" + moduleVal;
+                    },
+                    error:function(error){
+                        alert("response error: ", error);
+                    }
+                });
+            });
+        });
+
+        $(function(){
+            //按钮单击时执行
+            $("#connect").click(function(){
+                var urlVal = $("#url").val();
+                var usernameVal = $("#username").val();
+                var passwordVal = $("#password").val();
+                var url = "http://localhost:8080/tableList";
+                var data11 = {
+                    "url":urlVal,
+                    "username":usernameVal,
+                    "password":passwordVal,
+                };
+                var dataJson = JSON.stringify(data11);
+                $.ajax({
+                    async: false,
+                    url: url,
+                    type: "post",
+                    data: dataJson,
+                    datatype:"json",
+                    headers: {
+                        "content-Type": "application/json"
+                    },
+                    success:function (result) {
+
+                    },
+                    error:function(error){
+                        alert("response error: ", error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+模块：<input type="text" id="module" name="module" style="width: 100px"><br/>
+连接字符串：<input type="text" id="url" name="url" style="width: 300px" value="jdbc:mysql://127.0.0.1:3306/china_union">例如：jdbc:mysql://localhost:3306/mydb<br/>
+用户名：<input type="text" id="username" name="username" style="width: 100px" value="root"><br/>
+密码：<input type="text" id="password" name="password" style="width: 100px" value="123456"><br/>
+表名：<input type="text" id="tablename" name="tablename" style="width: 100px"><br/>
+<input type="button" id="connect" value="连接"/>
+<input type="button" id="download" value="代码生成"/>
+<div align="center">
+    <table style="border: 1px solid;">
+        <tr>
+            <th>表名</th>
+            <th>说明</th>
+        </tr>
+        <tr th:each="table:${tableList}">
+            <td th:text="${table.tableName}"></td>
+            <td th:text="${table.tableComment}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
