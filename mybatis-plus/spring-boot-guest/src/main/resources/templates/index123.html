@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index123</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //按钮单击时执行
+            $("#addUser").click(function(){
+                var nameVal = $("input[name='name']").val();
+                /*var name2 = document.getElementById("name").value;
+                var name3 = $("#name").val();
+                alert("姓名：" + nameVal + "&&" + name2 + "**" + name3);*/
+                var ageVal = $("input[name='age']").val();
+                var infoVal = $("input[name='info']").val();
+                var url = "http://localhost:8088/save";
+                var data11 = {
+                    "name":nameVal,
+                    "age":ageVal,
+                    "info":infoVal
+                };
+                var dataJson = JSON.stringify(data11);
+                $.ajax({
+                    async: false,
+                    url: url,
+                    type: "post",
+                    data: dataJson,
+                    datatype:"json",
+                    headers: {
+                        "content-Type": "application/json"
+                    },
+                    success:function (result) {
+                        window.location.href = "/userList";
+                    },
+                    error:function(error){
+                        alert("response error: ", error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+姓名：<input type="text" id="name" name="name"><br/>
+年龄：<input type="text" id="age" name="age"><br/>
+简介：<input type="text" id="info" name="info"><br/>
+<input type="button" id="addUser" value="提交" />
+
+</body>
+</html>

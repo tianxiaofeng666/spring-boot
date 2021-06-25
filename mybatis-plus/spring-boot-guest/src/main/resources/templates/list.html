@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+</head>
+<body>
+<a href="/addUser"><button>返回添加页面</button></a>
+<div align="center">
+    <table style="border: 1px solid;">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>介绍</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="user:${userList}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${user.info}"></td>
+            <td th:text="修改"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

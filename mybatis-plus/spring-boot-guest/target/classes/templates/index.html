@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //按钮单击时执行
+            $("#addUser").click(function(){
+                var nameVal = $("#name").val();
+                alert("姓名：" + nameVal);
+            });
+
+            $("#getDesc").click(function () {
+                var desc = $("#desc").val();
+                alert("简介：" + desc);
+            });
+        });
+     </script>
+</head>
+<body>
+<form id="form1" name="form1">
+    姓名：<input type="text" id="name" name="name"><br/>
+    年龄：<input type="text" id="age" name="age"><br/>
+    简介：<input type="text" id="info" name="info"><br/>
+    <input type="button" id="addUser" value="新增" />
+</form>
+<form id="form2" name="form2">
+    简介：<input type="text" id="desc" name="desc"><br/>
+    <input type="button" id="getDesc" value="查看" />
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#uploadedfile").change(function(){
+                var fileName = $(this).val();
+                alert("文件名：" + fileName);
+            });
+        });
+    </script>
+</head>
+<body>
+<form id="form" action="/saveUser" method="post" enctype="multipart/form-data">
+    姓名：<input type="text" id="name" name="name"><br/>
+    年龄：<input type="text" id="age" name="age"><br/>
+    图片：<input type="file" id="uploadedfile" name="file"><br/>
+    简介：<input type="text" id="info" name="info"><br/>
+    <button>保存</button>
+    <input type="submit" id="submit" value="提交"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //按钮单击时执行
+            $("#login").click(function(){
+                var nameVal = $("#username").val();
+                alert("姓名：" + nameVal);
+            });
+        });
+     </script>
+</head>
+<body>
+<form id="form1" name="form1">
+    用户名：<input type="text" id="username" name="username"><br/>
+    密码：<input type="text" id="password" name="password"><br/>
+    <input type="button" id="login" value="登陆" />
+</form>
+</body>
+</html>
