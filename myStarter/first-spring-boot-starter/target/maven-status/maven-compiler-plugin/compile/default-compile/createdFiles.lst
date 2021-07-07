@@ -1,0 +1,4 @@
+com\example\autoconfigure\properties\UniviewProperties.class
+com\example\autoconfigure\UniviewAutoConfiguration.class
+META-INF\spring-configuration-metadata.json
+com\example\autoconfigure\service\UniviewService.class

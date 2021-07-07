@@ -1,0 +1,22 @@
+{
+  "properties": [
+    {
+      "name": "uniview.id",
+      "type": "java.lang.String",
+      "description": "用户名",
+      "defaultValue": "admin"
+    },
+    {
+      "name": "uniview.pwd",
+      "type": "java.lang.String",
+      "description": "密码",
+      "defaultValue": "admin"
+    },
+    {
+      "name": "uniview.url",
+      "type": "java.lang.String",
+      "description": "路径",
+      "defaultValue": "www.baidu.com"
+    }
+  ]
+}

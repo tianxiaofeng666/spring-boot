@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "uniview",
+      "type": "com.example.autoconfigure.properties.UniviewProperties",
+      "sourceType": "com.example.autoconfigure.properties.UniviewProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "uniview.id",
+      "type": "java.lang.String",
+      "sourceType": "com.example.autoconfigure.properties.UniviewProperties"
+    },
+    {
+      "name": "uniview.pwd",
+      "type": "java.lang.String",
+      "sourceType": "com.example.autoconfigure.properties.UniviewProperties"
+    },
+    {
+      "name": "uniview.url",
+      "type": "java.lang.String",
+      "sourceType": "com.example.autoconfigure.properties.UniviewProperties"
+    }
+  ],
+  "hints": []
+}
