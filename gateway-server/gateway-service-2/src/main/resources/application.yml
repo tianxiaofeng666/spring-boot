@@ -1,0 +1,68 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: gateway-service
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 1500
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: cloud-user
+          uri: lb://cloud-user
+          predicates:
+            - Path=/cloudUser/**
+          filters:
+            - name: Hystrix
+              args:
+                name: cloudUserHystrix
+                fallbackUri: forward:/cloud-user-error
+
+        - id: user-center
+          uri: lb://user-center
+          predicates:
+            - Path=/userCenter/**
+
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 15
+            redis-rate-limiter.burstCapacity: 20
+            key-resolver: "#{@pathKeyResolver}"
+        - name: Hystrix
+          args:
+            name: commonHystrix
+            fallbackUri: forward:/default-error
+
+hystrix:
+  command:
+    commonHystrix:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+    cloudUserHystrix:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+
+authority:
+  enabled: true
+  ignoreUrl: /cloudUser/api/role/query,/cloudUser/api/role/add
