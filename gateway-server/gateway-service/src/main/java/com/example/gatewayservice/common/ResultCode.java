@@ -1,17 +1,10 @@
 package com.example.gatewayservice.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * 返回码实现
- *
- * @author pangu
  */
 
-@Getter
-@AllArgsConstructor
-public enum ResultCode implements IResultCode {
+public enum ResultCode {
 
     /**
      * 操作成功
@@ -20,7 +13,7 @@ public enum ResultCode implements IResultCode {
     /**
      * 业务异常
      */
-    FAILURE(400, "业务异常"),
+    FAILED(400, "业务异常"),
     /**
      * 服务未找到
      */
@@ -232,9 +225,22 @@ public enum ResultCode implements IResultCode {
     /**
      * 状态码
      */
-    final int code;
+    private int code;
     /**
      * 消息内容
      */
-    final String msg;
+    private String message;
+
+    private ResultCode(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

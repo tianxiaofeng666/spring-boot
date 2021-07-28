@@ -1,7 +1,7 @@
 package com.example.gatewayservice.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.gatewayservice.common.Result;
+import com.example.gatewayservice.common.RestfulResponse;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class ResponseUtil {
                                                    HttpStatus status, Object value) {
         response.setStatusCode(status);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, contentType);
-        Result<?> result = Result.fail(status.value(), value.toString());
+        RestfulResponse result = RestfulResponse.failed(status.value(), value.toString());
         DataBuffer dataBuffer = response.bufferFactory().wrap(JSONObject.toJSONString(result).getBytes());
         return response.writeWith(Mono.just(dataBuffer));
     }
