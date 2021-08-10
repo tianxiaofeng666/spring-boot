@@ -29,6 +29,7 @@ public class AutoConsumer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("当前线程11：" + Thread.currentThread().getName());
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("group.id", "test");
