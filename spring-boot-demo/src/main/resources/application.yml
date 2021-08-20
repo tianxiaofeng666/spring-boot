@@ -1,0 +1,8 @@
+server:
+  port: 1111
+spring:
+  application:
+    name: spring-boot-demo
+  profiles:
+    active: dev
+
