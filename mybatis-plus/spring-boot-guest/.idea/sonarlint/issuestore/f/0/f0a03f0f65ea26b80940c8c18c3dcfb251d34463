@@ -1,0 +1,8 @@
+
+W
+java:S34573"AFormat specifiers should be used instead of string concatenation.(„Â‚š
+N	java:S106F"9Replace this use of System.out or System.err by a logger.(íãë
+S	java:S106H"9Replace this use of System.out or System.err by a logger.(‡Üø»üÿÿÿÿ
+N	java:S106I"9Replace this use of System.out or System.err by a logger.(ú´ßø
+M
+java:S26293"7Use the built-in formatting to construct this argument.(„Â‚š

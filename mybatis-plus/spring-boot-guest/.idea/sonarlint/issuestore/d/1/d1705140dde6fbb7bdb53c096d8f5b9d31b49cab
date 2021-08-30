@@ -1,0 +1,11 @@
+
+U
+java:S1118":Add a private constructor to hide the implicit public one.(Æ£³àüÿÿÿÿ
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ªË“õ
+[
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(ªË“õ
+B
+java:S3011",This accessibility update should be removed.(˜ÂÓ˜
+>	java:S108.")Either remove or fill this block of code.(”ı¾
+n	java:S135"YReduce the total number of break and continue statements in this loop to use at most one.(¼ßğ¥

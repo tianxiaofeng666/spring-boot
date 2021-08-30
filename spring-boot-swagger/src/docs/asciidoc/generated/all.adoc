@@ -1,0 +1,401 @@
+= User API
+
+
+[[_overview]]
+== 概览
+用户管理接口
+
+
+=== 版本信息
+[%hardbreaks]
+__版本__ : 1.0.0
+
+
+=== URI scheme
+[%hardbreaks]
+__域名__ : localhost:9099
+__基础路径__ : /
+
+
+=== 标签
+
+* 用户管理 : User Controller
+* 角色管理 : Role Controller
+
+
+
+
+[[_paths]]
+== 资源
+
+[[_7d023d072627d0ad0df10e5da8fdfeaa]]
+=== 用户管理
+User Controller
+
+
+[[_addusingpost_1]]
+==== add
+....
+POST /api/user/add
+....
+
+
+===== 说明
+新增
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Header**|**token** +
+__必填__|token标记|string
+|**Body**|**req** +
+__必填__|req|<<_userreq,UserReq>>
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_restfulresponse,RestfulResponse>>
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `*/*`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/api/user/add
+----
+
+
+====== 请求 header
+[source,json]
+----
+"string"
+----
+
+
+====== 请求 body
+[source,json]
+----
+{
+  "comment" : "string",
+  "password" : "string",
+  "userName" : "string"
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "message" : "string",
+  "result" : "object"
+}
+----
+
+
+[[_queryusingpost_1]]
+==== query
+....
+POST /api/user/query
+....
+
+
+===== 说明
+查询
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Header**|**token** +
+__必填__|token标记|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|string
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `*/*`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/api/user/query
+----
+
+
+====== 请求 header
+[source,json]
+----
+"string"
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+"string"
+----
+
+
+[[_40344efe32cc5e6c74343414b374fd55]]
+=== 角色管理
+Role Controller
+
+
+[[_addusingpost]]
+==== add
+....
+POST /api/role/add
+....
+
+
+===== 说明
+新增
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Header**|**token** +
+__必填__|token标记|string
+|**Body**|**req** +
+__必填__|req|<<_rolereq,RoleReq>>
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_restfulresponse,RestfulResponse>>
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `*/*`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/api/role/add
+----
+
+
+====== 请求 header
+[source,json]
+----
+"string"
+----
+
+
+====== 请求 body
+[source,json]
+----
+{
+  "comment" : "string",
+  "roleName" : "string"
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "message" : "string",
+  "result" : "object"
+}
+----
+
+
+[[_queryusingpost]]
+==== query
+....
+POST /api/role/query
+....
+
+
+===== 说明
+查询
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Header**|**token** +
+__必填__|token标记|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|string
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `*/*`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/api/role/query
+----
+
+
+====== 请求 header
+[source,json]
+----
+"string"
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+"string"
+----
+
+
+
+
+[[_definitions]]
+== 定义
+
+[[_restfulresponse]]
+=== RestfulResponse
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|名称|说明|类型
+|**code** +
+__可选__|**样例** : `0`|integer (int32)
+|**message** +
+__可选__|**样例** : `"string"`|string
+|**result** +
+__可选__|**样例** : `"object"`|object
+|===
+
+
+[[_rolereq]]
+=== RoleReq
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|名称|说明|类型
+|**comment** +
+__可选__|备注 +
+**样例** : `"string"`|string
+|**roleName** +
+__必填__|角色名 +
+**样例** : `"string"`|string
+|===
+
+
+[[_userreq]]
+=== UserReq
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|名称|说明|类型
+|**comment** +
+__可选__|备注 +
+**样例** : `"string"`|string
+|**password** +
+__必填__|密码 +
+**样例** : `"string"`|string
+|**userName** +
+__必填__|用户名 +
+**样例** : `"string"`|string
+|===
+
+
+
+
+

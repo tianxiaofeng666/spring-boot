@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c2d3756b-c0dd-4c75-aa8d-de085966be8f" name="Default Changelist" comment="" />
+    <list default="true" id="c2d3756b-c0dd-4c75-aa8d-de085966be8f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/bean/RestfulResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/bean/ResultCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/config/ExceptionHandlerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/config/Swagger2Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/java/com/example/springbootswagger/model/request/UserReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/resources/application-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../spring-boot-swagger/src/main/resources/application-prod.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +23,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -28,6 +40,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1sjlJpwM8kpvUiFvsRrrsXvVLos" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="autoscrollToSource" value="true" />
@@ -135,6 +148,7 @@
       <workItem from="1624175592109" duration="33000" />
       <workItem from="1624175984159" duration="1432000" />
       <workItem from="1624235729753" duration="24208000" />
+      <workItem from="1629941146152" duration="105000" />
     </task>
     <servers />
   </component>
