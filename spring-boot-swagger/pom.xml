@@ -78,6 +78,12 @@
         </dependency>
         <!--end-->
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
+
         <!--scope:test 依赖仅仅参与测试相关的工作，包括测试代码的编译和执行，不会被打包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -13,7 +13,7 @@ package com.example.springbootswagger.bean;
      /*
       * 接口调用失败
       * */
-     FAILED(500, "接口调用失败"),
+     FAILED(500, "未知错误Error"),
      /*
       * 参数检验失败
       * */
@@ -29,7 +29,7 @@ package com.example.springbootswagger.bean;
      private int code;
      private String message;
 
-     private ResultCode(int code, String message) {
+     ResultCode(int code, String message) {
          this.code = code;
          this.message = message;
      }

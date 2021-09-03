@@ -1,7 +1,8 @@
-package com.example.springbootswagger.config;
+package com.example.springbootswagger.exception;
 
 import com.example.springbootswagger.bean.RestfulResponse;
 import com.example.springbootswagger.bean.ResultCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -19,8 +21,9 @@ import java.util.Optional;
  * 全局异常处理类
  * @author shs-cyhlwzytxf
  */
+@Slf4j
 @RestControllerAdvice
-public class ExceptionHandlerConfig {
+public class GlobalExceptionHandler {
     /**
      * 处理方法参数无效异常
      * @param ex
@@ -40,32 +43,30 @@ public class ExceptionHandlerConfig {
             sb.append(i);
             sb.append(fieldError.getDefaultMessage());
         }
-        System.out.println("信息：" + sb.toString());
+        log.info("入参异常:{}",sb.toString());
         //return RestfulResponse.failed(bindingResult.getFieldErrors().get(0).getDefaultMessage());
         return RestfulResponse.failed(ResultCode.VALIDATE_FAILED.getCode(),sb.toString());
     }
 
     /**
-     * 处理约束条件例外异常
-     * @param ex
+     * 自定义业务异常捕获
+     * @param e
      * @return
      */
-    @ExceptionHandler({ConstraintViolationException.class})
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public RestfulResponse handleConstraintViolationException(ConstraintViolationException ex) {
-        Optional<ConstraintViolation<?>> msg = ex.getConstraintViolations().stream().findFirst();
-        RestfulResponse response = RestfulResponse.failed();
-        return msg.map(constraintViolation -> setMessage(response, constraintViolation.getMessage())).orElseGet(this::setCode);
+    @ExceptionHandler(value = BusinessException.class)
+    public RestfulResponse businessException(BusinessException e){
+        log.error("发生业务异常，异常码为:{}，异常信息为：{}", e.getCode(), e.getMsg());
+        return RestfulResponse.failed(e.getCode(),e.getMsg());
     }
 
-
-    private RestfulResponse setMessage(RestfulResponse response,String message) {
-        response.setMessage(message);
-        return response;
-    }
-
-    private RestfulResponse setCode() {
+    /**
+     * 运行时异常捕获
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = Exception.class)
+    public RestfulResponse exceptionHandler(Exception e){
+        log.error("unknown Exception happened, the reason is : {}",e.getMessage());
         return RestfulResponse.failed();
     }
 

@@ -22,13 +22,9 @@ public class RoleController {
     @PostMapping("/add")
     @ApiOperation(value = "add", notes = "新增")
     public RestfulResponse add(@Validated @RequestBody RoleReq req){
-        try{
-            String roleName = req.getRoleName();
-            System.out.println("角色名：" + roleName);
-            return RestfulResponse.success();
-        }catch (Exception e){
-            return RestfulResponse.failed(e.getMessage());
-        }
+        String roleName = req.getRoleName();
+        System.out.println("角色名：" + roleName);
+        return RestfulResponse.success();
     }
 
     @PostMapping("/query")
