@@ -21,6 +21,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Autowired
     private ${table.mapperName} mapper;
 
+    @Override
     public Page<${table.entityName}> queryByCondition(JSONObject json) {
         Page<${table.entityName}> page = new Page<>(json.getInteger("pageNum"), json.getInteger("pageSize"));
         QueryWrapper<${table.entityName}> queryWrapper = new QueryWrapper<${table.entityName}>();

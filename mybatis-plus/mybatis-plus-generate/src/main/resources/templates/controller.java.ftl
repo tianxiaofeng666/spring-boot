@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import com.example.plus.bean.RestfulResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import com.example.plus.utils.Common;
 import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${table.entityName};
@@ -16,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author ${cfg.author}
  * @since ${cfg.currentDate}
  */
+@Api(tags = "${package.ModuleName}")
 @RestController
 @RequestMapping("${cfg.path}${package.ModuleName}")
 public class ${table.controllerName} {
@@ -24,6 +27,7 @@ public class ${table.controllerName} {
     private ${table.serviceName} service;
 
     @PostMapping("/add")
+    @ApiOperation(value = "add", notes = "新增")
     public RestfulResponse add(@RequestBody ${table.entityName} entity) {
         try {
             service.save(entity);
@@ -35,6 +39,7 @@ public class ${table.controllerName} {
     }
 
     @PostMapping("/delete")
+    @ApiOperation(value = "delete", notes = "删除")
     public RestfulResponse delete(@RequestBody JSONObject json) {
         try {
             long id = json.getLong("id");
@@ -47,6 +52,7 @@ public class ${table.controllerName} {
     }
 
     @PostMapping("/update")
+    @ApiOperation(value = "update", notes = "更新")
     public RestfulResponse update(@RequestBody ${table.entityName} entity) {
         try {
             service.updateById(entity);
@@ -61,6 +67,7 @@ public class ${table.controllerName} {
     * 根据条件查询并分页,自定义QueryWrapper
     */
     @PostMapping("/queryByCondition")
+    @ApiOperation(value = "query", notes = "查询")
     public RestfulResponse queryByCondition(@RequestBody JSONObject json) {
         try {
             Page<${table.entityName}> page = service.queryByCondition(json);
