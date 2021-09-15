@@ -1,0 +1,20 @@
+
+^
+java:S1128"HRemove this unused import 'org.springframework.context.annotation.Bean'.(‚î‰Ş
+^
+java:S1128"IRemove this unused import 'org.springframework.format.FormatterRegistry'.(ÊÈÌ
+j
+java:S1128"TRemove this unused import 'org.springframework.http.converter.HttpMessageConverter'.(ÅŒôì
+f
+java:S1128	"PRemove this unused import 'org.springframework.validation.MessageCodesResolver'.(Ğ“»ó
+`
+java:S1128
+"ERemove this unused import 'org.springframework.validation.Validator'.(ÏóÑùÿÿÿÿ
+|
+java:S1128"aRemove this unused import 'org.springframework.web.method.support.HandlerMethodArgumentResolver'.(«Ê’Ûúÿÿÿÿ
+y
+java:S1128"cRemove this unused import 'org.springframework.web.method.support.HandlerMethodReturnValueHandler'.(§¯îÓ
+k
+java:S1128"URemove this unused import 'org.springframework.web.servlet.HandlerExceptionResolver'.(¡›Â‚
+F
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ

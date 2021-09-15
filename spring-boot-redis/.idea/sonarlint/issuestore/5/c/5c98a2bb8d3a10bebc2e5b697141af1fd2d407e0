@@ -1,0 +1,23 @@
+
+E
+java:S3740""/Provide the parametrized type for this generic.(‚Ê«
+[
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(•Œ•û
+V	java:S125/"<This block of commented-out lines of code should be removed.(€¿ê™ıÿÿÿÿ
+Q	java:S1254"<This block of commented-out lines of code should be removed.(Ö£««
+V	java:S125D"<This block of commented-out lines of code should be removed.(Ñ³ùâûÿÿÿÿ
+M	java:S106k"9Replace this use of System.out or System.err by a logger.(Òæ 
+0
+java:S3751q"Make this method "public".(”ú¡
+\
+java:S3457|"AFormat specifiers should be used instead of string concatenation.(Ôâåàÿÿÿÿÿ
+]
+java:S1126‚"AReplace this if-then-else statement by a single return statement.(™’Óşÿÿÿÿ
+\
+java:S1192,"FDefine a constant instead of duplicating this literal "value" 3 times.(åîÇ„
+{
+java:S14885"YImmediately return this expression instead of assigning it to the temporary variable "a".(ã‘ŠÁşÿÿÿÿ8ö¤êî½/
+s
+java:S1488K"]Immediately return this expression instead of assigning it to the temporary variable "value".(œ—õß
+R
+java:S2629|"7Use the built-in formatting to construct this argument.(Ôâåàÿÿÿÿÿ

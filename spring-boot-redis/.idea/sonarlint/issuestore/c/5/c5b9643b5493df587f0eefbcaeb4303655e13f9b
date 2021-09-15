@@ -1,0 +1,17 @@
+
+N	java:S106 "9Replace this use of System.out or System.err by a logger.(ÝŠ–é
+R
+java:S1854."7Remove this useless assignment to local variable "obj".(¼ó“ðùÿÿÿÿ
+C
+java:S1481."(Remove this unused "obj" local variable.(¼ó“ðùÿÿÿÿ
+K
+java:S1128"6Remove this unused import 'com.alibaba.fastjson.JSON'.(Ö¢å$
+d
+java:S1128	"IRemove this unused import 'org.springframework.web.servlet.ModelAndView'.(Ç¨ÿäûÿÿÿÿ
+y
+java:S1128
+"^Remove this unused import 'org.springframework.web.servlet.handler.HandlerInterceptorAdapter'.(÷À¤¬üÿÿÿÿ
+E
+java:S1128"*Remove this unused import 'javax.servlet'.(ßëÑºýÿÿÿÿ
+U
+java:S1128"?Remove this unused import 'javax.servlet.annotation.WebFilter'.(ï¸Ýô
