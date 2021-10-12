@@ -8,35 +8,47 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @Slf4j
 public class RPCTest {
     public final static Logger logger = LoggerFactory.getLogger(RPCTest.class);
     public static void main(String[] args) throws Exception {
-//        String token = doGet();
-//        log.info("token：{}",token);
-        doGet();
+        //doGet();
+        doGetByRestTemplate();
     }
 
     //https  get拼参数请求
     public static String doGet(){
         String url = "https://58.19.177.202:9999/ipms/car/find/2";
-        CloseableHttpClient httpClient = createSSLClientDefault();
+        CloseableHttpClient httpClient = createSSLClientDefault123();
         CloseableHttpResponse httpResponse = null;
         String result = "";
         HttpGet httpGet = new HttpGet(url);
@@ -60,6 +72,19 @@ public class RPCTest {
         }
         log.info("结果：{}",result);
         return JSONObject.parseObject(result).getJSONObject("data").getString("accessToken");
+    }
+
+    //restTemplate 发起 get 请求
+    public static void doGetByRestTemplate(){
+       /* RestTemplate restTemplate = RestTemplateConfig.getRestTemplate();
+        String url = "https://58.19.177.202:9999/ipms/car/find/2";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("accessToken","99+qyLP/eTznVYNYkkFYVzMe5bgP6Xcxp5Vz+WhnpL8Y=");
+        org.springframework.http.HttpEntity<String> requestEntity = new org.springframework.http.HttpEntity<>(null, headers);;
+        ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET,requestEntity,String.class);
+        String result = res.getBody();
+        log.info("车辆查询：{}",result);*/
     }
 
     //https get body请求
@@ -148,7 +173,10 @@ public class RPCTest {
         }
     }
 
-
+    /**
+     * 里面部分方法过时了
+     * @return
+     */
     public static CloseableHttpClient createSSLClientDefault(){
         try {
             //SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
@@ -183,6 +211,44 @@ public class RPCTest {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 创建默认的httpClient实例.
+        return  HttpClients.createDefault();
+    }
+
+
+    public static CloseableHttpClient createSSLClientDefault123(){
+        try {
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                @Override
+                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    return true;
+                }
+            }).build();
+            httpClientBuilder.setSSLContext(sslContext);
+            HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    // 注册http和https请求
+                    .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                    .register("https", sslConnectionSocketFactory).build();
+            // 开始设置连接池
+            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+            // 最大连接数400
+            poolingHttpClientConnectionManager.setMaxTotal(400);
+            // 同路由并发数100
+            poolingHttpClientConnectionManager.setDefaultMaxPerRoute(100);
+            httpClientBuilder.setConnectionManager(poolingHttpClientConnectionManager);
+            // 重试次数
+            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(3, true));
+            return httpClientBuilder.build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
             e.printStackTrace();
         }
         // 创建默认的httpClient实例.

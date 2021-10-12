@@ -1,83 +1,93 @@
 package com.example.springbootdemo.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
+/**
+ * @author shs-cyhlwzytxf
+ */
+@Slf4j
 @Configuration
 public class RestTemplateConfig {
-    @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
-        return new RestTemplate(clientHttpRequestFactory);
-    }
 
     @Bean
-    public ClientHttpRequestFactory httpRequestFactory(HttpClient httpClient) {
-
-        return new HttpComponentsClientHttpRequestCRMFactory(httpClient);
-
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(clientHttpRequestFactory());
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+        return restTemplate;
     }
 
     @Bean
-    public HttpClient httpClient() {
-        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", PlainConnectionSocketFactory.getSocketFactory())
-                .register("https", SSLConnectionSocketFactory.getSocketFactory())
-                .build();
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
-        //设置整个连接池最大连接数 根据自己的场景决定
-        connectionManager.setMaxTotal(200);
-        //路由是对maxTotal的细分
-        connectionManager.setDefaultMaxPerRoute(100);
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setSocketTimeout(10000) //服务器返回数据(response)的时间，超过该时间抛出read timeout
-                .setConnectTimeout(5000)//连接上服务器(握手成功)的时间，超出该时间抛出connect timeout
-                .setConnectionRequestTimeout(1000)//从连接池中获取连接的超时时间，超过该时间未拿到可用连接，会抛出org.apache.http.conn.ConnectionPoolTimeoutException: Timeout waiting for connection from pool
-                .build();
-        return HttpClientBuilder.create()
-                .setDefaultRequestConfig(requestConfig)
-                .setConnectionManager(connectionManager)
-                .build();
+    public HttpComponentsClientHttpRequestFactory clientHttpRequestFactory() {
+        try {
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                @Override
+                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    return true;
+                }
+            }).build();
+            httpClientBuilder.setSSLContext(sslContext);
+            HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    // 注册http和https请求
+                    .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                    .register("https", sslConnectionSocketFactory).build();
+            // 开始设置连接池
+            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+            // 最大连接数400
+            poolingHttpClientConnectionManager.setMaxTotal(400);
+            // 同路由并发数100
+            poolingHttpClientConnectionManager.setDefaultMaxPerRoute(100);
+            httpClientBuilder.setConnectionManager(poolingHttpClientConnectionManager);
+            // 重试次数
+            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(3, true));
+            HttpClient httpClient = httpClientBuilder.build();
+            // httpClient连接配置
+            HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+            // 连接超时10s
+            clientHttpRequestFactory.setConnectTimeout(10000);
+            // 数据读取超时时间10s
+            clientHttpRequestFactory.setReadTimeout(10000);
+            // 连接不够用的等待时间20s
+            clientHttpRequestFactory.setConnectionRequestTimeout(20000);
+            return clientHttpRequestFactory;
+        } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+            log.error("初始化HTTP连接池出错", e);
+        }
+        return null;
     }
 
-    private static final class HttpComponentsClientHttpRequestCRMFactory extends HttpComponentsClientHttpRequestFactory {
-        public HttpComponentsClientHttpRequestCRMFactory(HttpClient httpClient) {
-            super(httpClient);
-        }
-
-        @Override
-        protected HttpUriRequest createHttpUriRequest(HttpMethod httpMethod, URI uri) {
-            if (httpMethod == HttpMethod.GET) {
-                return new HttpGetRequestForBody(uri);
-            }
-            return super.createHttpUriRequest(httpMethod, uri);
-        }
-    }
-
-    private static final class HttpGetRequestForBody extends HttpEntityEnclosingRequestBase {
-        public HttpGetRequestForBody(final URI uri) {
-            super.setURI(uri);
-        }
-
-        @Override
-        public String getMethod() {
-            return HttpMethod.GET.name();
-        }
-    }
+    /*public static RestTemplate getRestTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(clientHttpRequestFactory());
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+        return restTemplate;
+    }*/
 }

@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -163,20 +160,126 @@ public class TestController {
 
     @RequestMapping("/testSocketClient")
     public String testSocketClient(@RequestBody JSONObject json) throws Exception{
-        String data = json.getString("data");
-        int port = 8088;
-        //首先直接创建socket,端口号1~1023为系统保存，一般设在1023之外
-        Socket socket = new Socket("127.0.0.1", port);
+        String action = json.getString("action");
+        String onCommand = null;
+        String offCommand = null;
+        if("rise".equals(action)){
+            //上升
+            onCommand = "C9 05 00 00 FF 00 9C 72";
+            offCommand = "C9 05 00 00 00 00 DD 82";
+        }else if("drop".equals(action)){
+            //下降
+            onCommand = "C9 05 00 01 FF 00 CD B2";
+            offCommand = "C9 05 00 01 00 00 8C 42";
+        }else if("stop".equals(action)){
+            //急停
+            onCommand = "0xC90x050x000x020xFF0x000x3D0xB2";
+            offCommand = "C9 05 00 02 00 00 7C 42";
+        }
+        int port =1234;
+        String host = "127.0.0.1";
+        Socket socket = new Socket(host,port);
         //创建字节IO流输出
         OutputStream out = socket.getOutputStream();
-        //发送到服务器
-        out.write(data.getBytes());
-        //接收服务器数据IO流
+        //OutputStreamWriter osw = new OutputStreamWriter(out);
+        //BufferedWriter bw = new BufferedWriter(osw);
+        //指令发送到服务器
+        //out.write(toByteArray("C9 05 00 00 FF 00 9C 72"));
+        out.write(hexStringToByteArray("C9 05 00 00 FF 00 9C 72"));
+        //out.write(hexStrToBinaryStr("C9 05 00 00 FF 00 9C 72"));
+        //睡眠1秒
+        Thread.sleep(1000);
+        out.write(hexStringToByteArray("C90500000000DD82"));
+        //接收服务器返回数据IO流
         InputStream in =socket.getInputStream();
         byte[] b = new byte[1024];
         int len = in.read(b);
+        System.out.println("长度qqq：" + len);
         String result = new String(b,0,len);
         socket.close();
+        return result;
+    }
+
+    public static byte[] hexStringToByteArray(String hexString) {
+        hexString = hexString.replaceAll(" ", "");
+        System.out.println(hexString);
+        int len = hexString.length();
+        byte[] bytes = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            // 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个字节
+            bytes[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4) + Character
+                    .digit(hexString.charAt(i+1), 16));
+        }
+        return bytes;
+    }
+
+    public static byte[] toByteArray(String hexString) {
+        hexString = hexString.replaceAll(" ", "");
+        final byte[] byteArray = new byte[hexString.length() / 2];
+        int k = 0;
+        for (int i = 0; i < byteArray.length; i++) {//因为是16进制，最多只会占用4位，转换成字节需要两个16进制的字符，高位在先
+            byte high = (byte) (Character.digit(hexString.charAt(k), 16) & 0xff);
+            byte low = (byte) (Character.digit(hexString.charAt(k + 1), 16) & 0xff);
+            byteArray[i] = (byte) (high << 4 | low);
+            k += 2;
+        }
+        return byteArray;
+    }
+
+    /**
+     * 将十六进制的字符串转换成字节数组
+     *
+     * @param hexString
+     * @return
+     */
+    public static byte[] hexStrToBinaryStr(String hexString) {
+
+        hexString = hexString.replaceAll(" ", "");
+
+        int len = hexString.length();
+        int index = 0;
+
+        byte[] bytes = new byte[len / 2];
+
+        while (index < len) {
+
+            String sub = hexString.substring(index, index + 2);
+
+            bytes[index/2] = (byte)Integer.parseInt(sub,16);
+
+            index += 2;
+        }
+
+
+        return bytes;
+    }
+
+    /**
+     * 将字节数组转换成十六进制的字符串
+     *
+     * @return
+     */
+    public static String BinaryToHexString(byte[] bytes) {
+        String hexStr = "0123456789ABCDEF";
+        String result = "";
+        String hex = "";
+        for (byte b : bytes) {
+            hex = String.valueOf(hexStr.charAt((b & 0xF0) >> 4));
+            hex += String.valueOf(hexStr.charAt(b & 0x0F));
+            result += hex + " ";
+        }
+        return result;
+    }
+
+    @PostMapping("/testRPC")
+    public String testRPC(){
+        String url = "https://58.19.177.202:9999/ipms/car/find/2";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("accessToken","99+qyLP/eTznVYNYkkFYVzMe5bgP6Xcxp5Vz+WhnpL8Y=");
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);;
+        ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET,requestEntity,String.class);
+        String result = res.getBody();
         return result;
     }
 
