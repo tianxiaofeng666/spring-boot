@@ -20,6 +20,7 @@ import com.example.springbootrest.listener.SelectWriteHandler;
 import com.example.springbootrest.pojo.DemoData;
 import com.example.springbootrest.pojo.Member;
 import com.example.springbootrest.pojo.Policy;
+import com.example.springbootrest.qrcode.QRCodeUtil;
 import com.example.springbootrest.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -427,5 +428,54 @@ public class UserController {
     public String fileToBase64(@RequestBody JSONObject json){
         String filePath = json.getString("filePath");
         return Base64UtilNew.encryptToBase64(filePath);
+    }
+
+    /**
+     * 生成二维码，并把图片嵌入到二维码里面
+     * @param file
+     * @return
+     */
+    @RequestMapping("/createQRCode")
+    public String createQRCode(@RequestParam("file") MultipartFile file) throws Exception{
+        if(file.isEmpty()){
+            return "上传文件不能为空";
+        }
+        //获取文件名
+        String fileName = file.getOriginalFilename();
+
+        fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
+        System.out.print("（加个时间戳，尽量避免文件名称重复）保存的文件名为: "+fileName+"\n");
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        //创建文件路径
+        File dest = new File(docBase + date + "/",fileName);
+        //判断文件是否已经存在
+        if (dest.exists()) {
+            return "文件已经存在";
+        }
+        //判断文件父目录是否存在
+        if (!dest.getParentFile().exists()) {
+            System.out.print("创建上级目录。。。");
+            dest.getParentFile().mkdir();
+        }
+        try {
+            //上传文件
+            file.transferTo(dest);
+        } catch (IOException e) {
+            return "上传失败";
+        }
+        // 存放在二维码中的内容
+        String text = "https://qqe2.com/";
+        // 嵌入二维码的图片路径
+        String imgPath = docBase + date + "/" + fileName;
+        // 生成的二维码的路径及名称
+        String name = System.currentTimeMillis() + ".jpg";
+        String destPath = docBase + date + "/" + name;
+        //生成二维码
+        QRCodeUtil.encode(text, imgPath, destPath, true);
+        // 解析二维码
+        String str = QRCodeUtil.decode(destPath);
+        // 打印出解析出的内容
+        System.out.println(str);
+        return str + " *** " + "二维码路径：" + filePath + date + "/" + name;
     }
 }
