@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.usercenter.pojo.User;
 import com.example.usercenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -35,9 +35,17 @@ public class UserController {
     }
 
     @RequestMapping("/queryUserCenter")
-    public String queryUserCenter(@RequestBody JSONObject json){
+    public String queryUserCenter(@RequestBody JSONObject json, HttpServletRequest request){
+        String token = request.getHeader("token");
+        System.out.println("token:" + token);
         String name = json.getString("name");
         System.out.println("姓名：" + name);
         return "query success!";
+    }
+
+    @GetMapping("/sendData")
+    public String sendData(@RequestParam("no") String no, HttpServletRequest request){
+        String token = request.getHeader("token");
+        return no + "***" + token;
     }
 }
