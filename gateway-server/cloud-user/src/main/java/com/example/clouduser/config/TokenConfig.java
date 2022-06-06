@@ -17,6 +17,6 @@ public class TokenConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(tokenInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/user/query","/api/role/query","/api/user/queryUserCenter");
+        registry.addInterceptor(tokenInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/user/query","/api/role/query");
     }
 }
