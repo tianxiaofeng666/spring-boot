@@ -404,6 +404,7 @@ public class UserController {
         String base64Val = json.getString("base64Val");
         File file = Base64Util.base64ToFile(base64Val);
         MultipartFile multiFile = FileUtil.fileToMultipartFile(file);
+        //MultipartFile multiFile = Base64Util.base64Convert(base64Val);
         //获取文件名
         String fileName = multiFile.getOriginalFilename();
         System.out.println("文件名：" + fileName);
