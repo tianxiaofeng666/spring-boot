@@ -1,23 +1,37 @@
 /** 以下代码由代码生成器自动生成，如无必要，请勿修改！2021-6-7 9:32:59 **/
 package com.example.springbootswagger.bean;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author code-generator
  * @date 2021-6-7 9:32:59
  */
-public class RestfulResponse {
+@ApiModel
+public class RestfulResponse<T> {
+    @ApiModelProperty("code：0 成功")
     private int code;
+    @ApiModelProperty("返回描述")
     private String message;
-    private Object result;
+    @ApiModelProperty("返回数据")
+    private T result;
 
     private RestfulResponse() {
     }
 
-    private RestfulResponse(int code, String message, Object result) {
+    private RestfulResponse(int code, String message, T result) {
         this.code = code;
         this.message = message;
         this.result = result;
     }
+
+
+    public RestfulResponse(int code, String msg) {
+        this.code = code;
+        this.message = msg;
+    }
+
 
 
     /**
@@ -26,7 +40,7 @@ public class RestfulResponse {
      * @param result
      * @return
      */
-    public static RestfulResponse createOne(int code, String message, Object result) {
+    public static <T> RestfulResponse createOne(int code,String message,T result) {
         return new RestfulResponse(code, message, result);
     }
 
@@ -34,17 +48,16 @@ public class RestfulResponse {
     /**
      * @return
      */
-    public static RestfulResponse success() {
+    public static <T> RestfulResponse<T> success() {
         return new RestfulResponse(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), null);
     }
-
 
     /**
      * 成功返回结果
      *
      * @param result 获取的数据
      */
-    public static RestfulResponse success(Object result) {
+    public static <T> RestfulResponse<T> success(T result) {
         return new RestfulResponse(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
     }
 
@@ -54,7 +67,7 @@ public class RestfulResponse {
      * @param result  获取的数据
      * @param message 提示信息
      */
-    public static RestfulResponse success(String message, Object result) {
+    public static <T> RestfulResponse<T> success(String message, T result) {
         return new RestfulResponse(ResultCode.SUCCESS.getCode(), message, result);
     }
 
@@ -81,7 +94,7 @@ public class RestfulResponse {
      * @param code 编码
      * @param message 提示信息
      */
-    public static RestfulResponse failed(int code, String message) {
+    public static RestfulResponse failed(int code,String message) {
         return new RestfulResponse(code, message, null);
     }
 
@@ -101,11 +114,11 @@ public class RestfulResponse {
         this.message = message;
     }
 
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(T result) {
         this.result = result;
     }
 }
