@@ -1,13 +1,18 @@
 
-E
-java:S3740R"/Provide the parametrized type for this generic.(Ã…ÍÕ
-E
-java:S3740R"/Provide the parametrized type for this generic.(Ã…ÍÕ
+L
+java:S3740Q"/Provide the parametrized type for this generic.(ƒ¼‹8é¡™äÇ/
+L
+java:S3740Q"/Provide the parametrized type for this generic.(ƒ¼‹8é¡™äÇ/
+L
+java:S3740U"/Provide the parametrized type for this generic.(¿®Ã´8é¡™äÇ/
+L
+java:S3740U"/Provide the parametrized type for this generic.(¿®Ã´8ê¡™äÇ/
+Q
+java:S3740_"/Provide the parametrized type for this generic.(ê·©êúÿÿÿÿ8ê¡™äÇ/
 U
-java:S1161.":Add the "@Override" annotation above this method signature(“Ì¡—ÿÿÿÿÿ
-V	java:S125G"<This block of commented-out lines of code should be removed.(–èùûÿÿÿÿ
-V	java:S125_"<This block of commented-out lines of code should be removed.(…¼Ô¤ùÿÿÿÿ
+java:S11611":Add the "@Override" annotation above this method signature(“Ì¡—ÿÿÿÿÿ
+V	java:S125J"<This block of commented-out lines of code should be removed.(–èùûÿÿÿÿ
 C
-java:S1604/"(Make this anonymous inner class a lambda(Ø³ˆˆûÿÿÿÿ
+java:S16042"(Make this anonymous inner class a lambda(Ø³ˆˆûÿÿÿÿ
 w
-java:S1488E"aImmediately return this expression instead of assigning it to the temporary variable "jedisPool".(êäÂØ
+java:S1488H"aImmediately return this expression instead of assigning it to the temporary variable "jedisPool".(êäÂØ
