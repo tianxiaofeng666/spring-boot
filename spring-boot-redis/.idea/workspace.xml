@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9c92e382-ce48-4f78-8ddc-80f594aa5906" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../delay-task/spring-boot-delay-task/src/main/java/com/example/springbootdelaytask/pubsub/JedisSub.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../delay-task/spring-boot-delay-task/src/main/java/com/example/springbootdelaytask/pubsub/PubSubDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../spring-boot-rest/src/main/java/com/example/springbootrest/util/Base64DecodeMultipartFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../delay-task/spring-boot-delay-task/src/main/java/com/example/springbootdelaytask/consume/DelayMessageConsume.java" beforeDir="false" afterPath="$PROJECT_DIR$/../delay-task/spring-boot-delay-task/src/main/java/com/example/springbootdelaytask/consume/DelayMessageConsume.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spring-boot-rest/src/main/java/com/example/springbootrest/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../spring-boot-rest/src/main/java/com/example/springbootrest/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spring-boot-rest/src/main/java/com/example/springbootrest/util/Base64Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/../spring-boot-rest/src/main/java/com/example/springbootrest/util/Base64Util.java" afterDir="false" />
-    </list>
+    <list default="true" id="9c92e382-ce48-4f78-8ddc-80f594aa5906" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -193,6 +186,7 @@
       <workItem from="1631514212894" duration="1472000" />
       <workItem from="1634175784997" duration="1123000" />
       <workItem from="1640919093214" duration="7000" />
+      <workItem from="1657780131166" duration="368000" />
     </task>
     <task id="LOCAL-00001" summary="redis配置">
       <created>1634176894285</created>
