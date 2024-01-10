@@ -4,9 +4,8 @@ package ${package.Entity};
 import ${pkg};
 </#list>
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.TableName;
+
 
 /**
  * @author ${author}
