@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * @author ${author}
- * @since ${date}
+ * @date ${cfg.currentDate}
  */
 @Data
 @TableName("${table.name}")

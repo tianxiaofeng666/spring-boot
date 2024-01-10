@@ -4,12 +4,8 @@ import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
 import org.springframework.stereotype.Component;
 /**
-* <p>
-    * ${table.comment!} Mapper 接口
-    * </p>
-*
 * @author ${cfg.author}
-* @since ${cfg.currentDate}
+* @date ${cfg.currentDate}
 */
 @Component
 <#if kotlin>

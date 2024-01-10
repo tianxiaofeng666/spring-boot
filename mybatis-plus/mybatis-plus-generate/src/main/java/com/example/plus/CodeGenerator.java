@@ -52,7 +52,7 @@ public class CodeGenerator {
             //生成文件的输出目录
             gc.setOutputDir(projectPath + "/src/main/java");
             //开发人员
-            gc.setAuthor("txf");
+            gc.setAuthor("shs-cyhlwzytxf");
             gc.setServiceName("%sService");
             //是否打开输出目录
             gc.setOpen(false);
@@ -63,13 +63,14 @@ public class CodeGenerator {
 
             // 数据源配置
             DataSourceConfig dsc = new DataSourceConfig();
-            dsc.setUrl("jdbc:mysql://127.0.0.1:3306/china_union?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone = Asia/Shanghai&zeroDateTimeBehavior=convertToNull");
+            //dsc.setUrl("jdbc:mysql://127.0.0.1:3306/china_union?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone = Asia/Shanghai&zeroDateTimeBehavior=convertToNull");
+            dsc.setUrl("jdbc:mysql://10.9.101.30:3306/standard_product_visitor?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone = Asia/Shanghai&zeroDateTimeBehavior=convertToNull");
             //设置驱动
             dsc.setDriverName("com.mysql.cj.jdbc.Driver");
             //用户名
-            dsc.setUsername("root");
+            dsc.setUsername("standard_product_visitor");
             //密码
-            dsc.setPassword("123456");
+            dsc.setPassword("FX6deWtLHWIo");
             //设置数据源
             mpg.setDataSource(dsc);
 
@@ -92,7 +93,7 @@ public class CodeGenerator {
                 public void initMap() {
                     Map<String, Object> map = new HashMap<>();
                     //这些自定义的值在vm模板的语法是通过${cfg.xxx}来调用的。
-                    map.put("author", "xiaofeng");
+                    map.put("author", "shs-cyhlwzytxf");
                     map.put("currentDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     map.put("path","/api/");
                     this.setMap(map);

@@ -19,12 +19,12 @@
 </#list>
     </resultMap>
 
-    <!-- 通用查询结果列 -->
+    <#--<!-- 通用查询结果列 &ndash;&gt;
     <sql id="Base_Column_List">
 <#list table.commonFields as field>
         ${field.name},
 </#list>
         ${table.fieldNames}
-    </sql>
+    </sql>-->
 
 </mapper>
