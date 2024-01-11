@@ -4,18 +4,22 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import com.alibaba.fastjson.JSON;
+import com.example.demo.config.MinioProperties;
 import com.example.demo.constant.DateTimeConstant;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
+import com.example.demo.model.response.ExportStudentCodeResp;
 import com.example.demo.model.response.QueryAreaInfoResp;
 import com.example.demo.model.vo.ExcelCityCellRangeVo;
 import com.example.demo.model.vo.ExcelCityDataValidationVo;
 import com.example.demo.util.*;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,6 +47,93 @@ public class ExportService {
         }
     }
 
+    public void exportExcelZip(){
+        List<Student> list = new ArrayList<>();
+        Student stu1 = new Student("张三","男","111222");
+        Student stu2 = new Student("李四","女","3334445");
+        list.add(stu1);
+        list.add(stu2);
+        ExportParams exportParams = new ExportParams("学生信息", "学生信息", ExcelType.XSSF);
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, Student.class, list);
+        try{
+            ExportZipUtil.exportExcelZip(workbook,response);
+        }catch (Exception e){
+            log.error("报错");
+        }
+    }
+
+    public void exportQrCodeExcel(){
+        List<String> imgList = Arrays.asList("STU97ac35b68c0740d1a-031420193005041626.png",
+                "STUf927cbb4a0ac44b1a-3101012010320200133.png",
+                "STU97ac35b68c0740d1a-031420193005041626.png",
+                "STU97ac35b68c0740d1a-031420193005041626.png",
+                "STU97ac35b68c0740d1a-031420193005041626.png");
+        //由于按两列展示，按步长为2拆分成多个小集合
+        List<List<String>> list = Lists.partition(imgList, 2);
+        List<ExportStudentCodeResp> respList = new ArrayList<>();
+        list.forEach(item -> {
+            ExportStudentCodeResp resp = new ExportStudentCodeResp();
+            if(item.size() == 2){
+                InputStream inputStream1 = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(0));
+                resp.setInputStream1(inputStream1);
+                InputStream inputStream2 = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(1));
+                resp.setInputStream2(inputStream2);
+            }else{
+                InputStream inputStream = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(0));
+                resp.setInputStream1(inputStream);
+            }
+            respList.add(resp);
+        });
+        try {
+            ExportZipUtil.exportQrCodeExcel(respList,response);
+        }catch (Exception e){
+            log.error("报错");
+        }
+    }
+
+    public void exportQrCodeMultiSheetExcel(){
+        Map<String,Map<String,String>> imgMap = new LinkedHashMap<>();
+        Map<String,String> map1 = new HashMap();
+        map1.put("测试11","STU97ac35b68c0740d1a-031420193005041626.png");
+        map1.put("测试12","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        imgMap.put("一（1）班",map1);
+        Map<String,String> map2 = new HashMap();
+        map2.put("测试21","STU97ac35b68c0740d1a-031420193005041626.png");
+        imgMap.put("一（2）班",map2);
+        Map<String,String> map3 = new HashMap();
+        map3.put("测试31","STU97ac35b68c0740d1a-031420193005041626.png");
+        map3.put("测试32","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        map3.put("测试33","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        imgMap.put("一（3）班",map3);
+        Map<String,List<ExportStudentCodeResp>> sheetMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, String>> entry : imgMap.entrySet()){
+            String className = entry.getKey();
+            Map<String, String> stuInfos = entry.getValue();
+            List<ExportStudentCodeResp> classImgList = new ArrayList<>();
+            List<String> imgList = stuInfos.values().stream().collect(Collectors.toList());
+            List<List<String>> list = Lists.partition(imgList, 2);
+            list.forEach(item -> {
+                ExportStudentCodeResp resp = new ExportStudentCodeResp();
+                if(item.size() == 2){
+                    InputStream inputStream1 = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(0));
+                    resp.setInputStream1(inputStream1);
+                    InputStream inputStream2 = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(1));
+                    resp.setInputStream2(inputStream2);
+                }else{
+                    InputStream inputStream = CommonFileUtils.getObject(MinioProperties.getBucketName(),item.get(0));
+                    resp.setInputStream1(inputStream);
+                }
+                classImgList.add(resp);
+            });
+            sheetMap.put(className,classImgList);
+        }
+        try {
+            ExportZipUtil.exportQrCodeMultiSheetExcel(sheetMap,response);
+        }catch (Exception e){
+            log.error("报错");
+        }
+    }
+
     /**
      * 导出图片到压缩包
      */
@@ -62,6 +153,34 @@ public class ExportService {
     }
 
     /**
+     * 导出图片到压缩包，并分类创建目录
+     * 一（1）班，有两个同学有二维码
+     * 一（2）班，有一个
+     * 一（3）班，有三个
+     */
+    public void exportImageDirectoryZip(){
+        Map<String,Map<String,String>> imgMap = new HashMap<>();
+        Map<String,String> map1 = new HashMap();
+        map1.put("测试11","STU97ac35b68c0740d1a-031420193005041626.png");
+        map1.put("测试12","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        imgMap.put("一（1）班",map1);
+        Map<String,String> map2 = new HashMap();
+        map2.put("测试21","STU97ac35b68c0740d1a-031420193005041626.png");
+        imgMap.put("一（2）班",map2);
+        Map<String,String> map3 = new HashMap();
+        map3.put("测试31","STU97ac35b68c0740d1a-031420193005041626.png");
+        map3.put("测试32","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        map3.put("测试33","STUf927cbb4a0ac44b1a-3101012010320200133.png");
+        imgMap.put("一（3）班",map3);
+        try{
+            ExportZipUtil.downloadImageDirectory(imgMap,response);
+        }catch (Exception e){
+            log.error("报错");
+        }
+
+    }
+
+    /**
      * 导出excel和图片到压缩包
      */
     public void exportExcelAndImageZip(){
@@ -71,7 +190,7 @@ public class ExportService {
             Student stu2 = new Student("李四","女","3334445");
             list.add(stu1);
             list.add(stu2);
-            List<String> pathList = Arrays.asList("qrCode/31032719910512222X.png","qrCode/411327199105121111.png","2022-06-19/1655643499340023.jpg","qrCode/李四-31032719910512222X.png");
+            List<String> pathList = Arrays.asList("2023-03-22/1679447956238108.jpg","2023-03-22/1679448263959621.jpg");
             Map<String,String> headImgMap = new HashMap<>(16);
             for (int i=0; i<pathList.size(); i++){
                 headImgMap.put("张三" + i,pathList.get(i));

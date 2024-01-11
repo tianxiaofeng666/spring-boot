@@ -3,7 +3,13 @@ package com.example.demo.util;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.WriteTable;
 import com.example.demo.config.MinioProperties;
+import com.example.demo.model.response.ExportStudentCodeResp;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -32,6 +38,71 @@ public class ExportZipUtil {
     @Autowired
     public void setMinioClient(MinioClient minioClient) {
         ExportZipUtil.minioClient = minioClient;
+    }
+
+    public static void exportExcelZip(Workbook workbook,HttpServletResponse response) throws IOException{
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename="
+                + URLEncoder.encode(System.currentTimeMillis() + ".zip", "UTF-8"));
+        BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        ZipEntry zipEntry = new ZipEntry("学生信息111.xlsx");
+        zos.putNextEntry(zipEntry);
+        workbook.write(zos);
+        zos.flush();
+        zos.close();
+    }
+
+    public static void exportQrCodeExcel(List<ExportStudentCodeResp> list, HttpServletResponse response) throws IOException{
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename="
+                + URLEncoder.encode(System.currentTimeMillis() + ".zip", "UTF-8"));
+        BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        //构建一个excel对象
+        ExcelWriter excelWriter = EasyExcel.write().excelType(ExcelTypeEnum.XLSX).build();
+        //构建一个sheet页
+        WriteSheet writeSheet = EasyExcel.writerSheet("学生码").build();
+        //构建excel表头信息
+        WriteTable writeTable0 = EasyExcel.writerTable(0).head(ExportStudentCodeResp.class).needHead(Boolean.TRUE).build();
+        //将表头和数据写入表格
+        excelWriter.write(list, writeSheet, writeTable0);
+
+        ZipEntry zipEntry = new ZipEntry("学生.xlsx");
+        zos.putNextEntry(zipEntry);
+        Workbook workbook = excelWriter.writeContext().writeWorkbookHolder().getWorkbook();
+        //将excel对象以流的形式写入压缩流
+        workbook.write(zos);
+        zos.flush();
+        zos.close();
+    }
+
+    public static void exportQrCodeMultiSheetExcel(Map<String,List<ExportStudentCodeResp>> sheetMap, HttpServletResponse response) throws IOException{
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename="
+                + URLEncoder.encode(System.currentTimeMillis() + ".zip", "UTF-8"));
+        BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        //构建一个excel对象
+        ExcelWriter excelWriter = EasyExcel.write().excelType(ExcelTypeEnum.XLS).build();
+        sheetMap.forEach((key,value) -> {
+            //构建一个sheet页
+            WriteSheet writeSheet = EasyExcel.writerSheet(key).build();
+            //构建excel表头信息
+            WriteTable writeTable0 = EasyExcel.writerTable(0).head(ExportStudentCodeResp.class).needHead(Boolean.TRUE).build();
+            //将表头和数据写入表格
+            excelWriter.write(value, writeSheet, writeTable0);
+        });
+        ZipEntry zipEntry = new ZipEntry( "学生码.xls");
+        zos.putNextEntry(zipEntry);
+        Workbook workbook = excelWriter.writeContext().writeWorkbookHolder().getWorkbook();
+        //将excel对象以流的形式写入压缩流
+        workbook.write(zos);
+        zos.flush();
+        zos.close();
     }
 
     public static void downloadImage(Map<String, String> imgMap, HttpServletResponse response) throws IOException {
@@ -65,6 +136,48 @@ public class ExportZipUtil {
             } finally {
                 if (is != null) {
                     is.close();
+                }
+            }
+        }
+        zos.close();
+        bos.close();
+    }
+
+    public static void downloadImageDirectory(Map<String,Map<String,String>> imgMap, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename="
+                + URLEncoder.encode(System.currentTimeMillis() + ".zip", "UTF-8"));
+        BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        byte[] buffer = new byte[1024];
+        //  压缩图片信息
+        for (Map.Entry<String, Map<String, String>> entry : imgMap.entrySet()) {
+            String className  = entry.getKey();
+            Map<String, String> classImgMap = entry.getValue();
+            for (Map.Entry<String, String> imgEntry : classImgMap.entrySet()){
+                String name = imgEntry.getKey();
+                String path = imgEntry.getValue();
+                InputStream is = null;
+                try {
+                    is = minioClient.getObject(MinioProperties.getBucketName(), path);
+                    if (is == null) {
+                        continue;
+                    }
+                    String suffix = path.substring(path.lastIndexOf("."));
+                    zos.putNextEntry(new ZipEntry(className + "/" + name + suffix));
+                    int len;
+                    while ((len = is.read(buffer)) > 0) {
+                        zos.write(buffer, 0, len);
+                    }
+                    zos.closeEntry();
+                    is.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                } finally {
+                    if (is != null) {
+                        is.close();
+                    }
                 }
             }
         }

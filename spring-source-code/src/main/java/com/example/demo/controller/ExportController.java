@@ -25,11 +25,43 @@ public class ExportController {
     }
 
     /**
+     * 导出excel到压缩包,不产生临时路径
+     */
+    @GetMapping("/exportExcelZip")
+    public void exportExcelZip(){
+        exportService.exportExcelZip();
+    }
+
+    /**
+     * 导出学生二维码到excel并分两列展示
+     */
+    @GetMapping("/exportQrCodeExcel")
+    public void exportQrCodeExcel(){
+        exportService.exportQrCodeExcel();
+    }
+
+    /**
+     * 导出学生二维码到excel按班级多sheet并分两列展示
+     */
+    @GetMapping("/exportQrCodeMultiSheetExcel")
+    public void exportQrCodeMultiSheetExcel(){
+        exportService.exportQrCodeMultiSheetExcel();
+    }
+
+    /**
      * 导出图片到压缩包
      */
     @GetMapping("/exportImageZip")
     public void exportImageZip(){
         exportService.exportImageZip();
+    }
+
+    /**
+     * 导出图片到压缩包，并分类创建目录
+     */
+    @GetMapping("/exportImageDirectoryZip")
+    public void exportImageDirectoryZip(){
+        exportService.exportImageDirectoryZip();
     }
 
     /**

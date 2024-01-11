@@ -18,6 +18,7 @@
         <google.zxing.version>3.3.0</google.zxing.version>
         <hutool.core.version>5.5.5</hutool.core.version>
         <swagger2.version>2.9.2</swagger2.version>
+        <guava.version>29.0-jre</guava.version>
     </properties>
     <dependencies>
         <dependency>
@@ -89,6 +90,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 
